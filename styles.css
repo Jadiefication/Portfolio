@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik:500');
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+}
+
+.left {
+    width: 350px;
+    background-color: rgb(24, 22, 29);
+}
+
+.right {
+    flex: 1.5;
+    background-color: lightcoral;
+    display: flex;
+    flex-direction: column;
+}
+
+.upper{
+    flex: 1;
+    background-color: rgb(87, 108, 168);
+}
+
+.lower{
+    flex: 2;
+    background-color: rgb(226, 207, 234);
+}
+
+h1{
+    font-family: 'Segoe UI';
+    color: rgb(255, 255, 255);
+    display: flex;
+}
+.name{
+    color: cyan;
+}
+.animated-text {
+    margin-left: 125px;
+    opacity: 0;
+    transform: translateY(50px); /* Start the text 50px below its normal position */
+    animation: slideUp 1s ease forwards; /* Use keyframe animation */
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px); /* Start the text 50px below its normal position */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* Move the text to its normal position */
+    }
+}
+
+.pfp{
+    position: absolute;
+    top: 40px;
+    opacity: 0;
+    transform: translateY(50px); /* Start the text 50px below its normal position */
+    animation: slideUp 1s ease forwards; /* Use keyframe animation */
+    border-radius: 75px;
+    height: 100px;
+}
+
+
+.idk{
+    margin-left: 10px;
+    opacity: 0;
+    transform: translateY(50px); /* Start the text 50px below its normal position */
+    animation: slideUp 1s ease forwards; /* Use keyframe animation */
+    font-family: 'Segoe UI';
+    color: white;
+}
+
+.table{
+    margin-left: 20px;
+    opacity: 0;
+    transform: translateY(50px); /* Start the text 50px below its normal position */
+    animation: slideUp 1s ease forwards; /* Use keyframe animation */
+    font-family: 'Segoe UI';
+    color: black;
+}
+
+.dc{
+    margin-top: 20px;
+}
+
+.github{
+    opacity: 0;
+    transform: translateY(50px); /* Start the text 50px below its normal position */
+    animation: slideUp 1s ease forwards; /* Use keyframe animation */
+    color: white;
+    font-family: "Segoe UI";
+    margin-left: 10px;
+    margin-top: 20px;
+}
+
+.stats{
+    opacity: 0;
+    transform: translateY(50px); /* Start the text 50px below its normal position */
+    animation: slideUp 1s ease forwards; /* Use keyframe animation */
+    margin-left: 10px;
+    height: 150px;
+}
