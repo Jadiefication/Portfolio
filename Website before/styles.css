@@ -109,3 +109,87 @@ h1{
     margin-left: 10px;
     height: 150px;
 }
+
+/* beginning of a new website */
+.bc{
+    opacity: 0;
+    transform: translateY(50px); /* Start the text 50px below its normal position */
+    animation: slideUp 2s ease forwards; /* Use keyframe animation */
+    width: 100%;
+    object-fit: cover;
+    filter: blur(8px);
+}
+
+.window{
+    display: flex;
+    border: 5px solid;
+    border-radius: 10px;
+    border-color: white;
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    height: 75%;
+    width: 75%;
+}
+
+.text{
+    margin-left: 10px;
+    font-family: 'Segoe UI';
+    color: black;
+    opacity: 0;
+    transform: translateY(50px); /* Start the text 50px below its normal position */
+    animation: slideUp 1s ease forwards; /* Use keyframe animation */
+}
+
+.nm{
+    color: rgb(55, 114, 255);
+}
+
+.discord{
+    opacity: 0;
+    transform: translateY(50px); /* Start the text 50px below its normal position */
+    animation: slideUp 1s ease forwards; /* Use keyframe animation */
+    height: 40px;
+    position: fixed;
+    bottom: 0px;
+}
+
+.rside{
+    flex: 1;
+    flex-direction: column;
+    display: flex;
+}
+
+.lside{
+    flex: 1;
+    flex-direction: column;
+    background-color: brown;
+}
+
+.u{
+    flex: 1;
+}
+
+.l{
+    flex: 5;
+}
+
+
+.butta{
+    background-color: greenyellow;
+    border: 0;
+    border-radius: 5px;
+    height: 5%;
+    width: 15%;
+}
+
+butta:hover{
+    background-color: orange;
+}
+
+button:focus{
+    background-color: rgb(111, 156, 42);
+}
