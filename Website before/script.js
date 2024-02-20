@@ -1,3 +1,4 @@
+
 // JavaScript to add animation class when element is in view
 document.addEventListener('DOMContentLoaded', function() {
     const animatedText = document.querySelector('.animated-text');
@@ -23,4 +24,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.addEventListener('scroll', handleScroll);
 });
+
 
