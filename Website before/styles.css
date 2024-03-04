@@ -167,6 +167,7 @@ h1{
     flex: 1;
     flex-direction: column;
     background-color: brown;
+    border-radius: 5px;
 }
 
 .u{
@@ -186,10 +187,10 @@ h1{
     width: 15%;
 }
 
-butta:hover{
-    background-color: orange;
+.butta:hover{
+    background-color: rgb(98, 139, 37);
 }
 
-button:focus{
+.butta:focus:active{
     background-color: rgb(111, 156, 42);
 }
