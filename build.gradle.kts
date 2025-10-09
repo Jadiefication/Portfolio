@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("com.github.Jadiefication:Void:v1.0.1")
+    implementation("com.github.Jadiefication:Void:v1.0.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.20")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
