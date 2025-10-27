@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.2.20"
+    application
 }
 
 group = "io.jadiefication"
@@ -15,6 +16,10 @@ dependencies {
     implementation("com.github.Jadiefication:Void:v1.1.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.20")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+}
+
+application {
+    mainClass.set("io.jadiefication.WebsiteKt")
 }
 
 tasks.test {
