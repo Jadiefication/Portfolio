@@ -65,22 +65,35 @@ jobs:
           # Always copy favicon
           if [ -f src/main/resources/svg/favicon.svg ]; then cp src/main/resources/svg/favicon.svg site/svg/favicon.svg; fi
 
-          # Copy CSS to default locations and to the UUID-based path if present in HTML
+          # Copy CSS to default locations and to any UUID-based paths present in HTML
           if [ -f src/main/resources/css/style.css ]; then 
             # Fallback copies for simple paths
             cp src/main/resources/css/style.css site/css/style.css
             # Also place at root to satisfy href="/style.css" or "style.css"
             cp src/main/resources/css/style.css site/style.css
 
-            # Detect a href to /css/$uuid/styles.css (with or without leading slash) in generated HTML
-            css_path=$(grep -oE "/?css/[^\"']+/styles\.css" site/index.html | head -n1 || true)
-            if [ -n "$css_path" ]; then
-              # Normalize by stripping a leading /
-              css_path="${css_path#/}"
-              # Ensure directory exists and copy, renaming style.css -> styles.css as expected by the page
-              mkdir -p "site/$(dirname "$css_path")"
-              cp src/main/resources/css/style.css "site/${css_path}"
+            # Detect all hrefs to /css/$uuid/styles.css (with or without leading slash) in generated HTML
+            css_matches=$(grep -oE "/?css/[^\"']+/styles\.css" site/index.html | sort -u || true)
+            if [ -n "$css_matches" ]; then
+              while IFS= read -r css_path; do
+                [ -z "$css_path" ] && continue
+                # Normalize by stripping a leading /
+                css_path="${css_path#/}"
+                # Ensure directory exists and copy, renaming style.css -> styles.css as expected by the page
+                mkdir -p "site/$(dirname "$css_path")"
+                cp src/main/resources/css/style.css "site/${css_path}"
+              done <<< "$css_matches"
             fi
+          fi
+
+          # Normalize asset URLs in index.html for GitHub Pages (strip leading /)
+          if [ -f site/index.html ]; then
+            sed -i -E 's/href="\/(css\/[^\"]+)"/href="\1"/g' site/index.html
+            sed -i -E "s/href='\/(css\/[^']+)'/href='\1'/g" site/index.html
+            sed -i -E 's/href="\/(svg\/[^\"]+)"/href="\1"/g' site/index.html
+            sed -i -E "s/href='\/(svg\/[^']+)'/href='\1'/g" site/index.html
+            sed -i -E 's/src="\/(js\/[^\"]+)"/src="\1"/g' site/index.html
+            sed -i -E "s/src='\/(js\/[^']+)'/src='\1'/g" site/index.html
           fi
 
       - name: Stop server
