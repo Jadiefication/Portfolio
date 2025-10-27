@@ -73,7 +73,7 @@ jobs:
             cp src/main/resources/css/style.css site/style.css
 
             # Detect a href to /css/$uuid/styles.css (with or without leading slash) in generated HTML
-            css_path=$(grep -oE '/?css/[^"\']+/styles\.css' site/index.html | head -n1 || true)
+            css_path=$(grep -oE "/?css/[^\"']+/styles\.css" site/index.html | head -n1 || true)
             if [ -n "$css_path" ]; then
               # Normalize by stripping a leading /
               css_path="${css_path#/}"
