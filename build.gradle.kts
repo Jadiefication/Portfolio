@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.2.20"
+    kotlin("jvm") version "2.4.0"
     application
 }
 
@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("com.github.Jadiefication:Void:v1.1.1")
+    implementation("com.github.Void-Framework:Void:v2.3.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.20")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
@@ -26,5 +26,5 @@ tasks.test {
     useJUnitPlatform()
 }
 kotlin {
-    jvmToolchain(24)
+    jvmToolchain(21)
 }
