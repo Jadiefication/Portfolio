@@ -63,37 +63,56 @@ jobs:
         run: |
           mkdir -p site/css site/svg
           # Always copy favicon
-          if [ -f src/main/resources/svg/favicon.svg ]; then cp src/main/resources/svg/favicon.svg site/svg/favicon.svg; fi
+          if [ -f src/main/resources/svg/favicon.svg ]; then
+            cp src/main/resources/svg/favicon.svg site/svg/favicon.svg
+            cp src/main/resources/svg/favicon.svg site/favicon.ico || true
+          fi
 
-          # Copy CSS to default locations and to any UUID-based paths present in HTML
+          # Copy entire resources directories if present
+          if [ -d src/main/resources/css ]; then cp -r src/main/resources/css/. site/css/ || true; fi
+          if [ -d src/main/resources/svg ]; then cp -r src/main/resources/svg/. site/svg/ || true; fi
+
+          # Copy CSS to root and default locations and to any UUID-based paths present in HTML
           if [ -f src/main/resources/css/style.css ]; then 
-            # Fallback copies for simple paths
-            cp src/main/resources/css/style.css site/css/style.css
-            # Also place at root to satisfy href="/style.css" or "style.css"
+            # Place at root to satisfy href="/style.css" or "style.css"
             cp src/main/resources/css/style.css site/style.css
+            cp src/main/resources/css/style.css site/styles.css
+            # Place in css/ folder as both style.css and styles.css
+            cp src/main/resources/css/style.css site/css/style.css
+            cp src/main/resources/css/style.css site/css/styles.css
 
-            # Detect all hrefs to /css/$uuid/styles.css (with or without leading slash) in generated HTML
-            css_matches=$(grep -oE "/?css/[^\"']+/styles\.css" site/index.html | sort -u || true)
+            # Detect all hrefs to *.css files in generated HTML
+            css_matches=$(grep -oE "href=[\"'][^\"']*\.css[\"']" site/index.html | sed -E 's/href=[\"'\'']//g; s/[\"'\'']//g' | sort -u || true)
             if [ -n "$css_matches" ]; then
               while IFS= read -r css_path; do
                 [ -z "$css_path" ] && continue
+                # Skip external links
+                if [[ "$css_path" =~ ^https?:// ]] || [[ "$css_path" =~ ^// ]]; then
+                  continue
+                fi
                 # Normalize by stripping a leading /
-                css_path="${css_path#/}"
-                # Ensure directory exists and copy, renaming style.css -> styles.css as expected by the page
-                mkdir -p "site/$(dirname "$css_path")"
-                cp src/main/resources/css/style.css "site/${css_path}"
+                clean_path="${css_path#/}"
+                mkdir -p "site/$(dirname "$clean_path")"
+                cp src/main/resources/css/style.css "site/${clean_path}"
               done <<< "$css_matches"
             fi
           fi
 
+          # Attempt to also fetch static assets from running server as fallback
+          curl -fsS http://localhost:8080/style.css -o site/style.css || true
+          curl -fsS http://localhost:8080/css/style.css -o site/css/style.css || true
+          curl -fsS http://localhost:8080/svg/favicon.svg -o site/svg/favicon.svg || true
+
           # Normalize asset URLs in index.html for GitHub Pages (strip leading /)
           if [ -f site/index.html ]; then
-            sed -i -E 's/href="\/(css\/[^\"]+)"/href="\1"/g' site/index.html
-            sed -i -E "s/href='\/(css\/[^']+)'/href='\1'/g" site/index.html
-            sed -i -E 's/href="\/(svg\/[^\"]+)"/href="\1"/g' site/index.html
-            sed -i -E "s/href='\/(svg\/[^']+)'/href='\1'/g" site/index.html
-            sed -i -E 's/src="\/(js\/[^\"]+)"/src="\1"/g' site/index.html
-            sed -i -E "s/src='\/(js\/[^']+)'/src='\1'/g" site/index.html
+            sed -i -E 's/href="\/([^":]+\.(css|svg|ico|png|jpg|jpeg|gif|js))"/href="\1"/g' site/index.html
+            sed -i -E "s/href='\/([^':]+\.(css|svg|ico|png|jpg|jpeg|gif|js))'/href='\1'/g" site/index.html
+            sed -i -E 's/href="\/(css\/[^\"]+|svg\/[^\"]+|js\/[^\"]+|img\/[^\"]+)"/href="\1"/g' site/index.html
+            sed -i -E "s/href='\/(css\/[^']+|svg\/[^']+|js\/[^']+|img\/[^']+)'/href='\1'/g" site/index.html
+            sed -i -E 's/src="\/([^":]+\.(css|svg|ico|png|jpg|jpeg|gif|js))"/src="\1"/g' site/index.html
+            sed -i -E "s/src='\/([^':]+\.(css|svg|ico|png|jpg|jpeg|gif|js))'/src='\1'/g" site/index.html
+            sed -i -E 's/src="\/(js\/[^\"]+|img\/[^\"]+|svg\/[^\"]+|css\/[^\"]+)"/src="\1"/g' site/index.html
+            sed -i -E "s/src='\/(js\/[^']+|img\/[^']+|svg\/[^']+|css\/[^']+)'/src='\1'/g" site/index.html
           fi
 
       - name: Stop server
